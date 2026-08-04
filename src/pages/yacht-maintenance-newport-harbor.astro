@@ -1,0 +1,132 @@
+---
+/**
+ * Maintenance intent — targets "yacht maintenance Newport Harbor".
+ *
+ * Note: this page deliberately states NO service intervals. Those are set by the CEO
+ * and the Head of Marine Operations, not by engineering. The page explains how
+ * scheduling works without asserting what the intervals are.
+ */
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { url } from '../config';
+
+const faq = [
+  {
+    q: 'How do you know when something is due?',
+    a: 'Each system in the vessel inventory carries an interval based on calendar time, engine hours, or both. Engine hours are logged on every visit and the schedule regenerates from the current reading, with lead time built in so a haul-out or a yard booking can actually be arranged.',
+  },
+  {
+    q: 'What happens to the record of the work?',
+    a: 'A work order is not closed until the vendor invoice is attached and photographs of the completed work are uploaded. That record is attached to the vessel rather than to a person’s memory, and it is visible to the owner as soon as it is filed.',
+  },
+];
+---
+
+<Base
+  title="Yacht Maintenance in Newport Harbor"
+  description="Scheduled yacht maintenance in Newport Harbor. Systems tracked by engine hours and calendar, work dispatched before it is overdue, every job documented."
+  path="/yacht-maintenance-newport-harbor"
+  heading="Yacht maintenance in Newport Harbor"
+  kind="service"
+  faq={faq}
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">Newport Harbor</p>
+      <h1>Yacht maintenance, on a schedule.</h1>
+      <p class="lede">
+        Maintenance is the part of ownership that quietly decides what the boat
+        costs. We run it on a schedule instead of a phone call.
+      </p>
+      <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">Scheduled, not reactive</p>
+      <h2>Two clocks, tracked at once.</h2>
+      <p>
+        Every system aboard has its own service rhythm. Some are driven by the
+        calendar — sun and salt do not care whether the boat left the dock. Others
+        are driven by engine hours, and a vessel used hard for three months needs
+        attention a lightly used sistership does not.
+      </p>
+      <p>
+        We track both. Each system in your vessel's inventory carries its own
+        interval, and work is generated with enough lead time to actually book a
+        vendor and a yard slot.
+      </p>
+      <div class="notice">
+        <p>
+          <strong>Service intervals:</strong>
+          <Placeholder
+            key="intervals"
+            label="the specific intervals Anchor Point commits to per system — set by the CEO / Head of Marine Operations. The scheduling engine encodes whatever standard they define; it does not invent one, and no interval is published until confirmed"
+          />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <p class="eyebrow">Coverage</p>
+      <h2>The systems we track.</h2>
+      <ul class="ticks">
+        <li>Main engines — hours, oil and filter services, cooling system, running gear alignment</li>
+        <li>Generator — hours, services, cooling and exhaust</li>
+        <li>Underwater — bottom condition, running gear, underwater metals, haul-out and bottom job planning</li>
+        <li>Watermaker, HVAC and refrigeration</li>
+        <li>Electrical, batteries, charging and shore power</li>
+        <li>Electronics and navigation</li>
+        <li>Canvas, brightwork, upholstery and cosmetic condition</li>
+        <li>Safety equipment and its expiry dates</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">The record</p>
+      <h2>Every job leaves evidence.</h2>
+      <p>
+        A work order is not closed because a vendor said it was done. It is closed
+        when the invoice is attached and the technician has uploaded photographs of
+        the completed work.
+      </p>
+      <p>
+        This matters most at resale. A documented, continuous service history is
+        the difference between a survey that goes smoothly and one that turns into
+        a negotiation.
+      </p>
+      <div class="notice">
+        <p>
+          <strong>In-house versus subcontracted work:</strong>
+          <Placeholder
+            key="credentials"
+            label="which work is performed in-house versus by managed subcontractors — CEO to confirm. Owners treat this as a material distinction"
+          />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <h2>Common questions.</h2>
+      {
+        faq.map((item) => (
+          <div class="qa">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </div>
+        ))
+      }
+      <p>
+        Related: <a href={url('/yacht-management-newport-beach')}>yacht management in Newport Beach</a>
+        and our <a href={url('/services')}>full service list</a>.
+      </p>
+    </div>
+  </section>
+</Base>

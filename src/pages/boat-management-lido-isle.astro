@@ -1,0 +1,97 @@
+---
+/**
+ * Neighbourhood intent — targets "boat management Lido Isle".
+ *
+ * Distinct from the Balboa Island page by design — see the note there. Lido Isle's
+ * angle is systems-heavy vessels and community association constraints.
+ */
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { url } from '../config';
+
+const faq = [
+  {
+    q: 'Do you manage larger, systems-heavy vessels?',
+    a: 'Yes. A vessel with a generator, watermaker, air conditioning and a full electronics package does not have one maintenance schedule but a dozen, running on different clocks. Holding all of them at once is the core of what management is for.',
+  },
+];
+---
+
+<Base
+  title="Boat Management on Lido Isle"
+  description="Yacht management for Lido Isle owners. Private dock and community slip vessels maintained on schedule, with every job documented in your owner portal."
+  path="/boat-management-lido-isle"
+  heading="Boat management on Lido Isle"
+  kind="location"
+  place="Lido Isle"
+  faq={faq}
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">Lido Isle, Newport Beach</p>
+      <h1>Boat management on Lido Isle.</h1>
+      <p class="lede">
+        Lido Isle mixes private residential docks with community dockage, and
+        vessels here tend to be larger and more systems-heavy than the harbor
+        average.
+      </p>
+      <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">Complexity</p>
+      <h2>More boat means more schedule.</h2>
+      <p>
+        A vessel with a generator, a watermaker, air conditioning, a stabiliser
+        system and a full electronics package does not have one maintenance
+        schedule — it has a dozen, running on different clocks. Some track engine
+        hours, some track the calendar, and they only stay coordinated if something
+        is holding all of them at once.
+      </p>
+      <p>
+        That is the core of what we do. The systems inventory we build on day one
+        is what makes the rest tractable.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <p class="eyebrow">Community dockage</p>
+      <h2>Working within association rules.</h2>
+      <p>
+        Lido Isle dockage sits inside a community association structure, which can
+        mean rules about scheduling, contractors and notice for work on or around
+        the docks. We plan around those constraints as part of scheduling a job.
+      </p>
+      <div class="notice">
+        <p>
+          <strong>Association specifics:</strong>
+          <Placeholder
+            key="complianceScope"
+            label="what we can accurately state about working within Lido Isle community association rules — CEO to confirm rather than assume"
+          />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">What owners ask for</p>
+      <h2>The four things we hear most.</h2>
+      <ul class="ticks">
+        <li>Readiness on demand — the boat usable on short notice, not after a week of catching up</li>
+        <li>A single point of contact instead of five vendor phone numbers</li>
+        <li>Visible costs, with vendor invoices shown individually rather than rolled into one figure</li>
+        <li>A continuous service record that holds up at survey and resale</li>
+      </ul>
+      <p>
+        Also serving <a href={url('/boat-management-balboa-island')}>Balboa Island</a> and the wider
+        harbor — see <a href={url('/yacht-maintenance-newport-harbor')}>yacht maintenance in Newport Harbor</a>.
+      </p>
+    </div>
+  </section>
+</Base>

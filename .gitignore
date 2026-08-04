@@ -2,6 +2,8 @@
 dist/
 # generated types
 .astro/
+# cached schema.org vocabulary (~1.5MB, re-downloaded on demand by validate:schema)
+.cache/
 
 # dependencies
 node_modules/

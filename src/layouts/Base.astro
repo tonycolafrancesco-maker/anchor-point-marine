@@ -1,18 +1,68 @@
 ---
-import { SITE, NAV, COPY_APPROVED, url } from '../config';
+import { SITE, NAV, COPY_APPROVED, ANALYTICS, url } from '../config';
 import Placeholder from '../components/Placeholder.astro';
+import { graphFor, serialiseJsonLd, type PageMeta } from '../lib/schema';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  /** Site-relative path without the base, e.g. '/services'. Drives structured data. */
+  path?: string;
+  /** Visible H1, used as the breadcrumb leaf. Defaults to the title. */
+  heading?: string;
+  kind?: PageMeta['kind'];
+  /** For location pages — the specific place served. */
+  place?: string;
+  faq?: { q: string; a: string }[];
+  /** Set on the 404 page and anything else that must never be indexed. */
+  noindex?: boolean;
 }
 
-const { title, description = SITE.description } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  heading,
+  kind,
+  place,
+  faq,
+  noindex = false,
+} = Astro.props;
+
 const fullTitle = `${title} | ${SITE.name}`;
 const here = Astro.url.pathname.replace(/\/$/, '');
 const isCurrent = (href: string) => here.endsWith(href);
 const year = 2026; // Astro builds are static; avoid a build-time-dependent date.
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Derive the site-relative path from the URL so pages cannot drift out of sync with
+// their own structured data. Astro.url.pathname already carries the base.
+const pagePath = Astro.props.path ?? (here.replace(base, '') || '/');
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Structured data is suppressed on noindex utility pages (404, thank-you): marking up
+// a page we are telling Google to ignore is noise at best.
+const jsonLd = noindex
+  ? null
+  : serialiseJsonLd(
+      graphFor(
+        {
+          path: pagePath,
+          title: fullTitle,
+          description,
+          heading: heading ?? title,
+          kind,
+          place,
+          faq,
+        },
+        Astro.site,
+        base
+      )
+    );
+
+const ogImage = new URL(url('/og-default.svg'), Astro.site).href;
 ---
 
 <!doctype html>
@@ -28,16 +78,65 @@ const year = 2026; // Astro builds are static; avoid a build-time-dependent date
     {
       /* Until the CEO signs off on copy, keep the site out of search results.
          Flip COPY_APPROVED in src/config.ts to remove this. */
-      !COPY_APPROVED && <meta name="robots" content="noindex,nofollow" />
+      !COPY_APPROVED || noindex ? (
+        <meta name="robots" content="noindex,nofollow" />
+      ) : (
+        <meta
+          name="robots"
+          content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+        />
+      )
+    }
+
+    {/* Search Console / Bing ownership. Omitted entirely until the CEO supplies them. */}
+    {
+      ANALYTICS.googleSiteVerification && (
+        <meta name="google-site-verification" content={ANALYTICS.googleSiteVerification} />
+      )
+    }
+    {
+      ANALYTICS.bingSiteVerification && (
+        <meta name="msvalidate.01" content={ANALYTICS.bingSiteVerification} />
+      )
     }
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
     <meta name="theme-color" content="#08172a" />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" type="application/xml" href={url('/sitemap.xml')} />
+
+    {/* Structured data — see src/lib/schema.ts. Never contains an unverified fact. */}
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+
+    {
+      /* Analytics. Deferred so it can never block the first paint, and absent
+         entirely until configured — no third-party connection we did not ask for. */
+      ANALYTICS.plausibleDomain && (
+        <script defer data-domain={ANALYTICS.plausibleDomain} src="https://plausible.io/js/script.js" />
+      )
+    }
+    {
+      ANALYTICS.ga4MeasurementId && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS.ga4MeasurementId}`}
+          />
+          <script
+            set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${ANALYTICS.ga4MeasurementId}');`}
+          />
+        </>
+      )
+    }
   </head>
 
   <body>

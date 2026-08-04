@@ -10,7 +10,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "bash scripts/deploy.sh"
+    "deploy": "bash scripts/deploy.sh",
+    "verify": "node scripts/verify-seo.mjs",
+    "validate:schema": "node scripts/validate-schema.mjs",
+    "test:guardrails": "node scripts/test-guardrails.mjs",
+    "check": "astro build && node scripts/verify-seo.mjs && node scripts/validate-schema.mjs && node scripts/test-guardrails.mjs"
   },
   "dependencies": {
     "astro": "^7.1.6"

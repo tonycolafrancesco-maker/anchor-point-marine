@@ -1,0 +1,100 @@
+---
+/**
+ * Neighbourhood intent — targets "boat management Balboa Island".
+ *
+ * This is NOT the Lido Isle page with the name swapped. Google classifies near-
+ * duplicate location pages as doorway pages and discounts them, and that is the
+ * default failure mode of programmatic local SEO. Everything below is true of Balboa
+ * Island specifically: residential dockage, no marina staff, constrained access.
+ */
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { url } from '../config';
+
+const faq = [
+  {
+    q: 'Do you service boats at private residential docks on Balboa Island?',
+    a: 'Yes. Most Balboa Island dockage is residential rather than marina dockage, and it is a large part of what we do. We arrange and attend vendor visits so the owner does not need to be home for them.',
+  },
+];
+---
+
+<Base
+  title="Boat Management on Balboa Island"
+  description="Boat management for Balboa Island residents. We service vessels at private residential docks and handle the trades, the schedule and the paperwork."
+  path="/boat-management-balboa-island"
+  heading="Boat management on Balboa Island"
+  kind="location"
+  place="Balboa Island"
+  faq={faq}
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">Balboa Island, Newport Beach</p>
+      <h1>Boat management on Balboa Island.</h1>
+      <p class="lede">
+        Island dockage is residential — your boat lives behind your house, not in
+        a marina with a dockmaster. That changes what management has to cover.
+      </p>
+      <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">The practical difference</p>
+      <h2>Private dock, no marina staff.</h2>
+      <p>
+        On Balboa Island there is no marina office to accept a delivery, no
+        dockmaster to let a technician in, and no yard on site. Every vendor visit
+        needs someone to arrange access and be there for it. The dock itself —
+        pilings, hardware, dock box, shore power — is part of what has to be
+        maintained.
+      </p>
+      <p>
+        That is the practical difference between managing a boat here and managing
+        one in a slip. It is also why "I will just call someone when it needs
+        something" tends to quietly stop happening.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <p class="eyebrow">Scope</p>
+      <h2>What we handle for island dockage.</h2>
+      <ul class="ticks">
+        <li>Coordinating and attending every vendor visit, so you do not have to be home for it</li>
+        <li>Regular in-person checks of the vessel, its lines, covers and shore power</li>
+        <li>Dock-side condition monitoring alongside the vessel maintenance schedule</li>
+        <li>The full maintenance schedule, compliance tracking and owner reporting that every managed vessel gets</li>
+      </ul>
+      <div class="notice">
+        <p>
+          <strong>Moving the vessel to and from the yard:</strong>
+          <Placeholder
+            key="terms"
+            label="whether we provide vessel movement / captain services ourselves or coordinate a third party — CEO to confirm"
+          />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">Access</p>
+      <h2>Getting around the island.</h2>
+      <p>
+        Access matters here in a way it does not elsewhere in the harbor. The
+        island's streets and alleys are narrow, parking is limited, and much of the
+        practical access to a vessel is from the water side. We plan vendor visits
+        accordingly rather than discovering the problem on the day.
+      </p>
+      <p>
+        Also serving <a href={url('/boat-management-lido-isle')}>Lido Isle</a> and the wider
+        harbor — see <a href={url('/yacht-management-newport-beach')}>yacht management in Newport Beach</a>.
+      </p>
+    </div>
+  </section>
+</Base>

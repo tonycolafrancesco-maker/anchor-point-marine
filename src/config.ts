@@ -96,3 +96,109 @@ export const NAV = [
   { label: 'How It Works', href: '/how-it-works' },
   { label: 'Contact', href: '/contact' },
 ] as const;
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SEO AND DISCOVERABILITY  (ANC-7)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Machine-readable versions of the facts in PENDING.
+ *
+ * PENDING holds display strings for humans. Structured data needs the same facts
+ * broken into fields — Google cannot parse "123 Main St, Newport Beach CA" into a
+ * PostalAddress reliably, and a wrong address in markup is worse than none.
+ *
+ * The same rule applies here as everywhere else: `null` means unknown, and anything
+ * null is omitted from the markup entirely rather than guessed. Fill these in
+ * alongside the matching PENDING entry.
+ */
+export const STRUCTURED: {
+  /** E.164, e.g. '+1-949-555-0100'. Google matches this against the Business Profile. */
+  phone: string | null;
+  email: string | null;
+  address: {
+    street: string;
+    city: string;
+    region: string;
+    postalCode: string;
+    country: string;
+  } | null;
+  /** Business location, not the harbour centroid. */
+  geo: { lat: number; lng: number } | null;
+  hours: { days: string[]; opens: string; closes: string }[] | null;
+  /** Knowledge-panel logo. Must be raster (PNG/JPG), min 112x112 — Google rejects SVG. */
+  logo: { path: string; width: number; height: number } | null;
+  priceRange: string | null;
+  foundingDate: string | null;
+} = {
+  phone: null,
+  email: null,
+  address: null,
+  geo: null,
+  hours: null,
+  logo: null,
+  priceRange: null,
+  foundingDate: null,
+};
+
+/**
+ * Where we work. These are geographic facts about Newport Harbor rather than claims
+ * about the business, so they are safe to publish. The CEO should still confirm we
+ * are willing to take work in each one.
+ */
+export const SERVICE_AREA = {
+  city: 'Newport Beach',
+  region: 'CA',
+  country: 'US',
+  places: [
+    'Newport Harbor',
+    'Balboa Island',
+    'Lido Isle',
+    'Balboa Peninsula',
+    'Linda Isle',
+    'Bayshores',
+    'Corona del Mar',
+    'Newport Coast',
+  ],
+} as const;
+
+/**
+ * Analytics and Search Console. Every value is null until the CEO creates the
+ * accounts; the layout simply omits the tags, so there is nothing to break and no
+ * third-party request until we actually want one.
+ *
+ * See docs/CEO-CHECKLIST.md for what to create and where to paste it.
+ */
+export const ANALYTICS: {
+  /** Plausible: privacy-first, ~1KB, no cookie banner obligation. Recommended. */
+  plausibleDomain: string | null;
+  /** GA4 measurement ID, e.g. 'G-XXXXXXXXXX'. Optional; both can run together. */
+  ga4MeasurementId: string | null;
+  /** Google Search Console HTML-tag verification — the content="" value only. */
+  googleSiteVerification: string | null;
+  /** Bing Webmaster Tools. */
+  bingSiteVerification: string | null;
+} = {
+  plausibleDomain: null,
+  ga4MeasurementId: null,
+  googleSiteVerification: null,
+  bingSiteVerification: null,
+};
+
+/**
+ * Every indexable route, with its sitemap metadata.
+ *
+ * This is the single list the sitemap is generated from, so a new page cannot be
+ * silently left out of it. `scripts/verify-seo.mjs` fails the build if a built page
+ * is missing here, or if a sitemap entry does not match that page's canonical URL.
+ */
+export const ROUTES: { path: string; priority: string; changefreq: string }[] = [
+  { path: '/', priority: '1.0', changefreq: 'weekly' },
+  { path: '/yacht-management-newport-beach', priority: '0.9', changefreq: 'monthly' },
+  { path: '/yacht-maintenance-newport-harbor', priority: '0.9', changefreq: 'monthly' },
+  { path: '/services', priority: '0.8', changefreq: 'monthly' },
+  { path: '/boat-management-balboa-island', priority: '0.8', changefreq: 'monthly' },
+  { path: '/boat-management-lido-isle', priority: '0.8', changefreq: 'monthly' },
+  { path: '/how-it-works', priority: '0.7', changefreq: 'monthly' },
+  { path: '/contact', priority: '0.8', changefreq: 'yearly' },
+];
