@@ -6,14 +6,20 @@ import { FORM_ENDPOINT, url } from '../config';
 // FormSubmit needs an absolute URL to redirect to after a successful post.
 const thankYou = new URL(url('/thank-you'), Astro.site).href;
 
-// FormSubmit's plain form-encoded endpoint returns HTTP 500 on ANY non-ASCII
-// byte, in the subject or in the body. That is not a theoretical problem: iOS
-// silently turns a typed apostrophe into a curly one, so "I'm looking for..."
-// from an owner on a phone would fail and the lead would be lost. Their JSON
-// endpoint handles UTF-8 correctly, so we post JSON whenever fetch is
-// available and fall back to the plain form only without JS.
+// FormSubmit cannot handle non-ASCII input on either transport, and the two
+// failure modes are different:
+//   - form-encoded: HTTP 500, nothing delivered
+//   - JSON: HTTP 200 "success", an email arrives with EVERY FIELD STRIPPED
+// The second is worse — we would know someone tried and have no way to reach
+// them. This is not theoretical: iOS rewrites a typed apostrophe as a curly
+// one, so "I'm looking for management" from a phone at the dock hits it.
 //
-// Keep _subject ASCII-only so the no-JS fallback survives too.
+// So we normalise every value to ASCII before sending: smart punctuation is
+// mapped back to its plain equivalent and accents are stripped. A name losing
+// its accent is a cosmetic loss; losing the lead is not. Then we post JSON,
+// which gives us a real status code to retry on.
+//
+// _subject is kept ASCII-only so the no-JS fallback survives too.
 const ajaxEndpoint = FORM_ENDPOINT.replace(
   'https://formsubmit.co/',
   'https://formsubmit.co/ajax/'
@@ -160,6 +166,45 @@ const ajaxEndpoint = FORM_ENDPOINT.replace(
       var button = form.querySelector('button[type="submit"]');
       var originalLabel = button ? button.textContent : 'Send inquiry';
 
+      // Smart punctuation that phones and word processors insert on their own.
+      var PUNCTUATION = {
+        '‘': "'", '’': "'", '‚': "'", '‛': "'",
+        '“': '"', '”': '"', '„': '"', '‟': '"',
+        '–': '-', '—': '-', '―': '-', '−': '-',
+        '…': '...', ' ': ' ', '•': '*', '·': '*',
+        '°': ' deg', '′': "'", '″': '"', '€': 'EUR',
+        '£': 'GBP', '™': '(TM)', '®': '(R)', '©': '(C)',
+      };
+
+      // Everything the form sends must be ASCII or FormSubmit mangles or drops
+      // it. Order matters: map punctuation first, then strip accents via NFD,
+      // then drop anything still outside ASCII.
+      function toAscii(value) {
+        var text = String(value == null ? '' : value);
+        text = text.replace(/[‘’‚‛“”„‟–—―−… •·°′″€£™®©]/g, function (character) {
+          return PUNCTUATION[character] || ' ';
+        });
+        if (text.normalize) {
+          // NFD splits an accented letter into "e" + combining accent; drop the accent.
+          text = text.normalize('NFD').replace(/[̀-ͯ]/g, '');
+        }
+        // Anything left that is still non-ASCII becomes a space rather than
+        // being deleted, so words do not silently run together.
+        var ascii = text
+          .replace(/[^\x20-\x7E\n\r\t]/g, ' ')
+          .replace(/[ \t]{2,}/g, ' ')
+          .trim();
+
+        // A wholly non-Latin value (a name in Chinese, say) would reduce to
+        // nothing. Never hand back an empty field where the visitor typed
+        // something — flag it instead, so whoever reads the lead knows to ask
+        // rather than assuming the field was left blank.
+        if (ascii === '' && String(value).trim() !== '') {
+          return '[entered in non-Latin characters - please ask the owner]';
+        }
+        return ascii;
+      }
+
       form.addEventListener('submit', function (event) {
         event.preventDefault();
         if (form.getAttribute('data-sending') === '1') return;
@@ -171,7 +216,7 @@ const ajaxEndpoint = FORM_ENDPOINT.replace(
             if (String(value).trim() !== '') honeyFilled = true;
             return;
           }
-          payload[key] = value;
+          payload[toAscii(key)] = toAscii(value);
         });
 
         // Bot filled the hidden field. Send them to the thank-you page so the

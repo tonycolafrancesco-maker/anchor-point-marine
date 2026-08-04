@@ -23,10 +23,16 @@ byte**, in `_subject` or in any field value. Verified directly:
 
 | Payload | Result |
 | --- | --- |
-| `_subject` with an ASCII hyphen | 302, delivered |
-| `_subject` with an em dash | 500, lost |
-| body containing an em dash | 500, lost |
-| same content as JSON to `/ajax/` | 200, delivered |
+| form-encoded, `_subject` with an ASCII hyphen | 302, delivered with all fields |
+| form-encoded, `_subject` with an em dash | **500, lost** |
+| form-encoded, em dash in the body | **500, lost** |
+| JSON to `/ajax/`, ASCII only | 200, delivered with all fields |
+| JSON to `/ajax/`, any non-ASCII | **200 "success", email arrives with EVERY FIELD STRIPPED** |
+
+That last row is the dangerous one. The API reports success, an email lands, and
+it contains no name, no email address, no vessel details — just a timestamp. We
+would know somebody tried to reach us and have no way to reach them back. A
+silent 500 is recoverable by a visitor who retries; this is not.
 
 This is not an edge case. iOS turns a typed apostrophe into a curly one
 automatically, so an owner writing "I'm looking for full management" on a phone
@@ -34,16 +40,32 @@ automatically, so an owner writing "I'm looking for full management" on a phone
 inquiry would have vanished. Accented names (José, Renée) would fail the same
 way.
 
-Two consequences, both load-bearing:
+### What we do about it
 
-- The JS path posts JSON, which handles UTF-8 correctly. That is why the
-  progressive enhancement exists; it is not decoration.
-- `_subject` is kept ASCII-only so the no-JS fallback also survives. **Do not
-  put an em dash back in that value**, however much it matches the house style.
+Because *neither* transport survives non-ASCII, the fix is not "pick the other
+endpoint" — it is to normalise the input before it leaves the browser.
+`toAscii()` in `src/pages/contact.astro`:
 
-Residual risk: a visitor with JS disabled who types a non-ASCII character still
-hits the 500. That is a small population, and it disappears entirely when we
-move to our own Worker.
+1. maps smart punctuation back to plain equivalents (`’`→`'`, `—`→`-`, `…`→`...`),
+2. strips accents via NFD (`José`→`Jose`),
+3. replaces anything still non-ASCII with a space,
+4. and if a field reduces to nothing — a name written wholly in a non-Latin
+   script — substitutes an explicit marker so the field is never silently blank.
+
+Losing an accent from a name is a cosmetic loss we can apologise for. Losing the
+lead is not recoverable.
+
+Two things that are load-bearing and must not be "tidied up":
+
+- **Do not put an em dash back in `_subject`.** It matches the house style used
+  everywhere else on the site, which is exactly why someone will try.
+- **Do not remove `toAscii()`** on the grounds that the JSON endpoint "supports
+  UTF-8". It accepts it and then throws the data away.
+
+Residual risk: a visitor with JavaScript disabled who types a non-ASCII
+character still hits the 500, because no sanitising runs. That is a small
+population, they get a visible error rather than silent loss, and it disappears
+entirely when we move to our own Worker.
 
 ## Why this design
 
