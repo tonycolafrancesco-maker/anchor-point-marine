@@ -1,0 +1,116 @@
+---
+import { SITE, NAV, COPY_APPROVED, url } from '../config';
+import Placeholder from '../components/Placeholder.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = SITE.description } = Astro.props;
+const fullTitle = `${title} | ${SITE.name}`;
+const here = Astro.url.pathname.replace(/\/$/, '');
+const isCurrent = (href: string) => here.endsWith(href);
+const year = 2026; // Astro builds are static; avoid a build-time-dependent date.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {/* Astro.url.pathname already carries the configured base — do not re-prefix. */}
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+
+    {
+      /* Until the CEO signs off on copy, keep the site out of search results.
+         Flip COPY_APPROVED in src/config.ts to remove this. */
+      !COPY_APPROVED && <meta name="robots" content="noindex,nofollow" />
+    }
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#08172a" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <a class="brand" href={url('/')}>
+          <span>
+            Anchor&nbsp;<span class="brand__mark">Point</span>
+            <span class="brand__sub">Marine Group</span>
+          </span>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <span class="nav__links">
+            {
+              NAV.filter((n) => n.href !== '/contact').map((item) => (
+                <a
+                  href={url(item.href)}
+                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+          </span>
+          <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell">
+        <div class="footer__grid">
+          <div>
+            <h2>{SITE.name}</h2>
+            <p style="margin-bottom:0.75rem;max-width:34ch;">
+              Full-service yacht management for owners in Newport Harbor,
+              California.
+            </p>
+            <p style="margin:0;">
+              Service area: <Placeholder key="serviceArea" label="service area — harbors covered beyond Newport" />
+            </p>
+          </div>
+
+          <div>
+            <h2>Pages</h2>
+            <ul>
+              <li><a href={url('/')}>Home</a></li>
+              {NAV.map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
+            </ul>
+          </div>
+
+          <div>
+            <h2>Contact</h2>
+            <ul>
+              <li>Phone: <Placeholder key="phone" label="business phone number" /></li>
+              <li>Email: <Placeholder key="email" label="business email address" /></li>
+              <li>Office: <Placeholder key="address" label="office or mailing address" /></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__bottom">
+          <span>&copy; {year} {SITE.name}. All rights reserved.</span>
+          <span>Newport Beach, California</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

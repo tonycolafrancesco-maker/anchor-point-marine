@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { url } from '../config';
+---
+
+<Base
+  title="How It Works"
+  description="The Anchor Point owner experience: onboarding survey, systems inventory, maintenance schedule, and monthly reporting."
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">How it works</p>
+      <h1>Four steps from handover to routine.</h1>
+      <p class="lede">
+        The first few weeks are the work. After that, management should be
+        something you notice only when the monthly report arrives.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">Step 01</p>
+      <h2>Onboarding survey</h2>
+      <p>
+        We meet you at the vessel and walk it together. The purpose is to
+        establish an honest baseline: what condition the boat is in today, what
+        has been deferred, and what needs attention first.
+      </p>
+      <p>
+        You tell us how you use the boat — weekends in the harbour, long
+        offshore runs, guests aboard, or laid up for part of the year. That
+        usage pattern is what makes the maintenance schedule realistic rather
+        than theoretical.
+      </p>
+      <ul class="ticks">
+        <li>Walkthrough of the vessel with the owner</li>
+        <li>Current condition recorded and photographed</li>
+        <li>Deferred and outstanding items identified up front</li>
+        <li>Usage pattern and owner priorities captured</li>
+      </ul>
+      <p>
+        Typical timing: <Placeholder key="onboardTiming" label="how long onboarding takes from first walkthrough to active management" />
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <p class="eyebrow">Step 02</p>
+      <h2>Systems inventory</h2>
+      <p>
+        We record every major system aboard with its make, model, serial number,
+        current hours, and warranty status. Engines, generator, watermaker,
+        HVAC, electronics, hull and running gear.
+      </p>
+      <p>
+        This is the unglamorous step that makes everything afterwards work. A
+        maintenance schedule is only as good as the equipment list behind it,
+        and it is the thing most owners discover they have never had written
+        down in one place.
+      </p>
+      <ul class="ticks">
+        <li>Make, model, and serial captured per system</li>
+        <li>Engine and generator hours logged as the tracking baseline</li>
+        <li>Warranty windows recorded before they lapse unnoticed</li>
+        <li>The inventory belongs to you and travels with the vessel</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">Step 03</p>
+      <h2>Maintenance schedule</h2>
+      <p>
+        With the inventory in place, each system gets its service intervals.
+        Those intervals run on two clocks — calendar time and engine hours —
+        and whichever comes first is what triggers the work.
+      </p>
+      <p>
+        Each item carries lead time ahead of its due date, so haul-outs, bottom
+        jobs, zinc changes, oil services, and survey deadlines surface while
+        there is still time to book a yard slot rather than after the window
+        has closed.
+      </p>
+      <ul class="ticks">
+        <li>Intervals assigned per system from the manufacturer's schedule</li>
+        <li>Dual tracking on calendar date and engine hours</li>
+        <li>Lead-time alerts before an item becomes due</li>
+        <li>Work orders raised, dispatched, and tracked to completion</li>
+      </ul>
+      <div class="notice">
+        <p>
+          Intervals come from manufacturer schedules and Anchor Point's
+          operating standard.
+          <Placeholder key="intervalSource" label="confirm the authority Anchor Point cites for service intervals" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <p class="eyebrow">Step 04</p>
+      <h2>Monthly report</h2>
+      <p>
+        Each month you receive a written report: what was completed, what is
+        scheduled next, the current hours and condition of your systems, and
+        every cost incurred that period — with photographs of the work.
+      </p>
+      <p>
+        The intent is that you can read it in three minutes and know the full
+        state of your vessel, and that if you ever want to check a claim about
+        what was done, the record is already there.
+      </p>
+      <ul class="ticks">
+        <li>Work completed, with photo evidence</li>
+        <li>Work scheduled for the coming period</li>
+        <li>Current engine hours and system condition</li>
+        <li>Itemised costs and management fee</li>
+      </ul>
+      <p>
+        Report delivery: <Placeholder key="reportDelivery" label="how and when the monthly report is delivered — e.g. emailed PDF on the first of the month" />
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="shell center">
+      <h2>Start with a walkthrough.</h2>
+      <p class="lede">
+        Send us your vessel details and we'll arrange a time to see the boat at
+        your slip or mooring.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+      </div>
+    </div>
+  </section>
+</Base>

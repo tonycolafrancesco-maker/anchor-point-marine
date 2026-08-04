@@ -1,0 +1,153 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { FORM_ENDPOINT, url } from '../config';
+
+// FormSubmit needs an absolute URL to redirect to after a successful post.
+const thankYou = new URL(url('/thank-you'), Astro.site).href;
+---
+
+<Base
+  title="Contact"
+  description="Request a yacht management consultation in Newport Harbor. Tell us about your vessel and we'll arrange a walkthrough at your slip or mooring."
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">Contact</p>
+      <h1>Tell us about your vessel.</h1>
+      <p class="lede">
+        The more you can tell us up front, the more useful the first
+        conversation will be. Nothing here commits you to anything.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell shell--narrow">
+      <form class="form" action={FORM_ENDPOINT} method="POST">
+        <!-- FormSubmit configuration -->
+        <input type="hidden" name="_subject" value="New yacht management inquiry — Anchor Point website" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value={thankYou} />
+
+        <!-- Honeypot: real people never see this; bots fill it and get dropped. -->
+        <div class="hp" aria-hidden="true">
+          <label for="_honey">Leave this field empty</label>
+          <input type="text" id="_honey" name="_honey" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <h2>Your details</h2>
+
+        <div class="field">
+          <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="name" name="Name" required autocomplete="name" />
+        </div>
+
+        <div class="field-row field-row--2">
+          <div class="field">
+            <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="Email" required autocomplete="email" inputmode="email" />
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="Phone" autocomplete="tel" inputmode="tel" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="contact-pref">Best way to reach you</label>
+          <select id="contact-pref" name="Preferred contact method">
+            <option value="">No preference</option>
+            <option>Email</option>
+            <option>Phone call</option>
+            <option>Text message</option>
+          </select>
+        </div>
+
+        <h2 style="margin-top:1.5rem;">Your vessel</h2>
+
+        <div class="field-row field-row--3">
+          <div class="field">
+            <label for="make">Make</label>
+            <input type="text" id="make" name="Vessel make" placeholder="e.g. Grand Banks" />
+          </div>
+          <div class="field">
+            <label for="model">Model</label>
+            <input type="text" id="model" name="Vessel model" placeholder="e.g. 42 Classic" />
+          </div>
+          <div class="field">
+            <label for="length">Length</label>
+            <input type="text" id="length" name="Length overall" placeholder="e.g. 42 ft" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="field-row field-row--2">
+          <div class="field">
+            <label for="year">Year</label>
+            <input type="text" id="year" name="Year built" placeholder="e.g. 2008" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label for="berth">
+              Current berth or mooring
+              <span class="hint">Marina and slip, mooring field, or dry storage.</span>
+            </label>
+            <input type="text" id="berth" name="Berth or mooring" placeholder="e.g. Balboa Yacht Basin, slip 12" />
+          </div>
+        </div>
+
+        <h2 style="margin-top:1.5rem;">What you need</h2>
+
+        <div class="field">
+          <label for="needs">
+            Tell us what you're looking for <span class="req" aria-hidden="true">*</span>
+            <span class="hint">
+              Full management, help catching up on deferred maintenance, a
+              specific job, or you're not sure yet — all useful answers.
+            </span>
+          </label>
+          <textarea id="needs" name="What they need" required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="timing">Timing</label>
+          <select id="timing" name="Timing">
+            <option value="">Not sure yet</option>
+            <option>As soon as possible</option>
+            <option>Within the next month</option>
+            <option>Within the next few months</option>
+            <option>Just gathering information</option>
+          </select>
+        </div>
+
+        <div class="form__submit">
+          <button class="btn btn--primary" type="submit">Send inquiry</button>
+        </div>
+
+        <p class="form__note">
+          Fields marked with an asterisk are required. We use your details to
+          respond to this inquiry.
+          <Placeholder key="privacy" label="privacy statement — how enquiry data is stored, how long, and whether a privacy policy page is required" />
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell shell--narrow">
+      <h2>Prefer to call?</h2>
+      <p>
+        Phone: <Placeholder key="phone" label="business phone number" />
+      </p>
+      <p>
+        Email: <Placeholder key="email" label="business email address" />
+      </p>
+      <p>
+        Office hours: <Placeholder key="hours" label="business hours and expected response time" />
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--ghost" href={url('/how-it-works')}>See how onboarding works</a>
+      </div>
+    </div>
+  </section>
+</Base>

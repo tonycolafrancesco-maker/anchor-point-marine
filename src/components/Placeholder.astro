@@ -1,0 +1,28 @@
+---
+/**
+ * Renders a conspicuous [PLACEHOLDER: ...] chip for any claim the CEO has not
+ * yet confirmed. If the value exists in config PENDING, the real value renders
+ * instead and the chip disappears.
+ */
+import { pending } from '../config';
+
+interface Props {
+  /** Key in config PENDING. */
+  key?: string;
+  /** Human-readable description of what the CEO needs to supply. */
+  label: string;
+}
+
+const { key, label } = Astro.props;
+const value = key ? pending(key) : null;
+---
+
+{
+  value ? (
+    <span>{value}</span>
+  ) : (
+    <span class="ph" data-placeholder={key ?? label}>
+      [PLACEHOLDER: {label}]
+    </span>
+  )
+}

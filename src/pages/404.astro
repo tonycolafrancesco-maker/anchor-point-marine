@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../config';
+---
+
+<Base title="Page not found" description="That page could not be found.">
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">404</p>
+      <h1>That page isn't here.</h1>
+      <p class="lede">
+        The link may be out of date. Everything on the site is reachable from
+        the pages below.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/')}>Back to home</a>
+        <a class="btn btn--ghost" href={url('/contact')}>Contact us</a>
+      </div>
+    </div>
+  </section>
+</Base>

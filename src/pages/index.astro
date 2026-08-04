@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { url } from '../config';
+---
+
+<Base
+  title="Yacht Management in Newport Harbor"
+  description="Full-service yacht management for owners in Newport Harbor, California. Preventive maintenance, vendor coordination, compliance and documentation, and transparent owner reporting."
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">Newport Harbor, California</p>
+      <h1>Full-service yacht management.</h1>
+      <p class="lede">
+        We handle the maintenance schedule, the vendors, the paperwork, and the
+        reporting — so the only decision left to you is when to go out.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+        <a class="btn btn--ghost" href={url('/how-it-works')}>See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <p class="eyebrow">The approach</p>
+        <h2>Know what's happening with your boat without having to ask.</h2>
+        <p>
+          Managing a yacht well is not complicated work, but it is relentless
+          work. Zincs, oil, impellers, bottom growth, batteries, documentation
+          renewals — each one is small, and each one becomes expensive the month
+          it gets missed.
+        </p>
+        <p>
+          Anchor Point runs that schedule for you. We build a full inventory of
+          your vessel's systems, put every service interval on a calendar driven
+          by both time and engine hours, and coordinate the trades who do the
+          work. You get a written record of what was done, when, by whom, and
+          what it cost.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell">
+      <p class="eyebrow">What we do</p>
+      <h2>Four things, done consistently.</h2>
+      <div class="grid grid--4" style="margin-top:2.25rem;">
+        <article class="card">
+          <h3>Preventive maintenance</h3>
+          <p>
+            A service schedule built from your vessel's actual systems and
+            tracked against both calendar time and engine hours.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Vendor coordination</h3>
+          <p>
+            We scope the job, schedule the trade, meet them at the boat, and
+            confirm the work was completed properly.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Compliance &amp; documentation</h3>
+          <p>
+            Registration, documentation, and insurance renewal dates tracked
+            ahead of their deadlines rather than after them.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Owner reporting</h3>
+          <p>
+            A monthly report covering what was done, what is scheduled next, and
+            what it cost — with photos of the work.
+          </p>
+        </article>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--ghost" href={url('/services')}>Full service detail</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <p class="eyebrow">The owner experience</p>
+      <h2>From first walkthrough to monthly report.</h2>
+      <div class="grid grid--4" style="margin-top:2.25rem;">
+        <article class="card">
+          <span class="card__num">01</span>
+          <h3>Onboarding survey</h3>
+          <p>We walk the vessel with you and record its current condition.</p>
+        </article>
+        <article class="card">
+          <span class="card__num">02</span>
+          <h3>Systems inventory</h3>
+          <p>Every major system logged with make, model, serial, and hours.</p>
+        </article>
+        <article class="card">
+          <span class="card__num">03</span>
+          <h3>Maintenance schedule</h3>
+          <p>Intervals set per system, with lead time so nothing lands late.</p>
+        </article>
+        <article class="card">
+          <span class="card__num">04</span>
+          <h3>Monthly report</h3>
+          <p>Work completed, work upcoming, and costs — in writing.</p>
+        </article>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--ghost" href={url('/how-it-works')}>Read the full process</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="shell">
+      <div class="grid grid--2">
+        <div>
+          <p class="eyebrow">Credentials</p>
+          <h2>Who you're handing the keys to.</h2>
+          <p class="lede">
+            Every item here needs the CEO to supply a verifiable value before
+            this section is final.
+          </p>
+        </div>
+        <div class="stack">
+          <p>
+            Operating in Newport Harbor since <Placeholder key="yearsOperating" label="year founded / years operating" />
+          </p>
+          <p>
+            Licensing and credentials: <Placeholder key="credentials" label="licenses, certifications, or professional affiliations — verifiable only" />
+          </p>
+          <p>
+            Insurance: <Placeholder key="insurance" label="liability and care-custody-control coverage held" />
+          </p>
+          <p>
+            Managed by: <Placeholder key="ownerName" label="principal name and marine background" />
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell center">
+      <h2>Tell us about your vessel.</h2>
+      <p class="lede">
+        Send us the basics and we'll follow up to arrange a walkthrough at your
+        slip or mooring.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+      </div>
+    </div>
+  </section>
+</Base>

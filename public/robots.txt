@@ -1,0 +1,9 @@
+# Anchor Point Marine Group
+#
+# The site is intentionally closed to crawlers until the CEO has signed off on
+# copy and filled the placeholders. To open it up:
+#   1. Fill the values in src/config.ts PENDING
+#   2. Set COPY_APPROVED = true in src/config.ts (removes the noindex meta tag)
+#   3. Replace the two lines below with:  User-agent: *  /  Allow: /
+User-agent: *
+Disallow: /

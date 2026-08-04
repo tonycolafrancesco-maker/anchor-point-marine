@@ -1,0 +1,162 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { url } from '../config';
+---
+
+<Base
+  title="Services"
+  description="Preventive maintenance management, vendor coordination, compliance and documentation, and transparent owner reporting for yachts in Newport Harbor."
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">Services</p>
+      <h1>What management actually covers.</h1>
+      <p class="lede">
+        Four services that work as one system. The maintenance schedule drives
+        the vendor work, the vendor work produces the record, and the record
+        becomes your monthly report.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">01 — Preventive maintenance management</p>
+      <h2>A schedule built from your vessel, not a generic checklist.</h2>
+      <p>
+        We start from what is actually installed on your boat — engines,
+        generator, watermaker, HVAC, electronics, hull and running gear — and
+        build the service schedule from those specific systems.
+      </p>
+      <p>
+        Intervals are tracked two ways at once: by calendar date and by engine
+        hours, because a boat that ran 300 hours this season needs a different
+        schedule from one that ran 40. Each upcoming item carries lead time, so
+        haul-outs, bottom work, and running-gear service get scheduled before
+        they are due rather than after.
+      </p>
+      <ul class="ticks">
+        <li>Full systems inventory with make, model, serial, and hour readings</li>
+        <li>Service intervals tracked by both calendar time and engine hours</li>
+        <li>Lead-time alerting so scheduled work is booked in advance</li>
+        <li>Condition noted and photographed at each visit</li>
+      </ul>
+      <div class="notice">
+        <p>
+          <strong>Service intervals:</strong>
+          <Placeholder key="intervals" label="the specific intervals Anchor Point commits to per system — to be set by the CEO / Head of Marine Operations, not published until confirmed" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <p class="eyebrow">02 — Vendor coordination</p>
+      <h2>Someone meets the trade at the boat.</h2>
+      <p>
+        Most of the friction in yacht ownership is not the repair — it is
+        arranging the repair. Getting a quote, matching a schedule, being at the
+        slip when the technician arrives, and confirming afterwards that the
+        work was actually done to standard.
+      </p>
+      <p>
+        We take that end to end. We scope the job, arrange the contractor,
+        attend the work where attendance matters, and check the result before
+        the invoice is approved.
+      </p>
+      <ul class="ticks">
+        <li>Job scoped and quoted before work is authorised</li>
+        <li>Scheduling handled directly with the trade</li>
+        <li>Attendance at the vessel for work that warrants it</li>
+        <li>Completion checked and photographed before invoice approval</li>
+        <li>Costs captured against the vessel record as the work closes</li>
+      </ul>
+      <div class="notice">
+        <p>
+          <strong>Spend authority:</strong>
+          <Placeholder key="spendThreshold" label="the dollar threshold below which Anchor Point may authorise work without owner approval" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell prose">
+      <p class="eyebrow">03 — Compliance &amp; documentation</p>
+      <h2>Renewal dates tracked ahead of the deadline.</h2>
+      <p>
+        Vessel documentation, registration, and insurance all run on renewal
+        cycles that are easy to lose track of and unpleasant to discover late.
+        We hold those dates alongside the maintenance schedule and raise them
+        before they expire.
+      </p>
+      <ul class="ticks">
+        <li>Registration and vessel documentation renewal dates tracked</li>
+        <li>Insurance renewal and survey deadlines calendared with lead time</li>
+        <li>Service records retained and organised per vessel</li>
+        <li>Documentation assembled for survey, sale, or insurance review</li>
+      </ul>
+      <div class="notice">
+        <p>
+          We track deadlines and assemble records. We do not provide legal,
+          insurance, or regulatory advice.
+          <Placeholder key="complianceScope" label="confirm exact compliance scope and any disclaimer wording required by counsel or insurer" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell prose">
+      <p class="eyebrow">04 — Transparent owner reporting</p>
+      <h2>A written record, every month.</h2>
+      <p>
+        This is the part we care most about. An owner should never have to send
+        a text asking what happened with their boat.
+      </p>
+      <p>
+        Every month you receive a report covering the work completed that
+        period, the work scheduled next, the current state of your vessel's
+        systems, and the costs incurred — with photographs of the work as
+        evidence, not just line items.
+      </p>
+      <ul class="ticks">
+        <li>Monthly vessel report covering work done, work upcoming, and spend</li>
+        <li>Photo documentation attached to completed work</li>
+        <li>Running service history retained for the life of the engagement</li>
+        <li>Costs itemised per job rather than bundled into a single figure</li>
+      </ul>
+      <div class="notice">
+        <p>
+          <strong>Online owner portal:</strong> a real-time portal is in
+          development. Reporting is delivered as a written monthly report until
+          it ships.
+          <Placeholder key="portalTiming" label="confirm whether to mention the portal publicly, and any timing you want stated" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="shell">
+      <div class="prose">
+        <p class="eyebrow">Engagement &amp; fees</p>
+        <h2>How management is priced.</h2>
+        <p>
+          Fee structure:
+          <Placeholder key="pricing" label="management fee structure — monthly retainer, per-foot rate, or tiers" />
+        </p>
+        <p>
+          Agreement terms:
+          <Placeholder key="terms" label="contract length, notice period, and what is included vs. billed separately" />
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/contact')}>Request a Consultation</a>
+        <a class="btn btn--ghost" href={url('/how-it-works')}>See the onboarding process</a>
+      </div>
+    </div>
+  </section>
+</Base>

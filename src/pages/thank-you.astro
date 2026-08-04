@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { url } from '../config';
+---
+
+<Base
+  title="Inquiry received"
+  description="Thank you — your inquiry has reached Anchor Point Marine Group."
+>
+  <section class="hero">
+    <div class="shell">
+      <p class="eyebrow">Inquiry received</p>
+      <h1>Thank you — we have your details.</h1>
+      <p class="lede">
+        Your inquiry has been sent through to us directly. We'll be in touch to
+        arrange a walkthrough at your slip or mooring.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/')}>Back to home</a>
+        <a class="btn btn--ghost" href={url('/services')}>Read about our services</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell shell--narrow">
+      <h2>What happens next</h2>
+      <ul class="ticks">
+        <li>We review your vessel details and come back to you directly.</li>
+        <li>
+          We arrange a walkthrough at the boat — no charge, no obligation.
+        </li>
+        <li>
+          If it's a fit, we build your systems inventory and maintenance
+          schedule from that visit.
+        </li>
+      </ul>
+      <p>
+        Expected response time: <Placeholder key="responseTime" label="response-time commitment — do not publish a number until you can consistently meet it" />
+      </p>
+      <p>
+        If your inquiry is urgent, call <Placeholder key="phone" label="business phone number" />.
+      </p>
+    </div>
+  </section>
+</Base>
