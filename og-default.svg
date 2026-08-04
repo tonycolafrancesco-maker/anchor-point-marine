@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Anchor Point Marine Group — yacht management in Newport Harbor">
+  <!--
+    Social share placeholder. Deliberately typographic: no photography we do not own,
+    and no claim we cannot back. Replace with a real 1200x630 photograph once we have
+    licensed vessel imagery and owner permission to use it.
+  -->
+  <rect width="1200" height="630" fill="#08172a"/>
+  <rect y="566" width="1200" height="64" fill="#0f2942"/>
+  <g fill="none" stroke="#7fb2cc" stroke-width="9" stroke-linecap="round" transform="translate(96,178) scale(1.55)">
+    <circle cx="32" cy="18" r="5"/>
+    <path d="M32 23v27"/>
+    <path d="M22 30h20"/>
+    <path d="M16 40c0 9 7 14 16 14s16-5 16-14"/>
+  </g>
+  <text x="244" y="288" fill="#ffffff" font-family="Helvetica,Arial,sans-serif" font-size="60" font-weight="700">Anchor Point Marine Group</text>
+  <text x="244" y="352" fill="#7fb2cc" font-family="Helvetica,Arial,sans-serif" font-size="33">Full-service yacht management in Newport Harbor</text>
+  <text x="244" y="408" fill="#5b7f96" font-family="Helvetica,Arial,sans-serif" font-size="26">Newport Beach, California</text>
+</svg>

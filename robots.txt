@@ -1,0 +1,7 @@
+# Anchor Point Marine Group
+#
+# The site is intentionally closed to crawlers until the CEO has signed off on
+# copy and filled the placeholders in src/config.ts. Setting COPY_APPROVED = true
+# opens the site up and adds the sitemap reference here automatically.
+User-agent: *
+Disallow: /
