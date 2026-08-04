@@ -3,13 +3,47 @@
 ## The path a lead takes
 
 1. Owner fills the form at `/contact`.
-2. Browser POSTs directly to `https://formsubmit.co/wheresjoe@gmail.com`.
-3. FormSubmit emails the submission to that address within seconds.
-4. Browser is redirected to `/thank-you`.
+2. With JavaScript (essentially every real visitor): the page POSTs the fields
+   as JSON to FormSubmit's `/ajax/` endpoint, retrying up to three times, then
+   sends the browser to `/thank-you`. If all three attempts fail the owner sees
+   an explicit error rather than a blank page.
+3. Without JavaScript: the plain `<form>` POST goes to the same endpoint and
+   FormSubmit issues a 302 to `/thank-you`.
+4. Either way FormSubmit emails the submission to the destination inbox within
+   seconds.
 
 No database, no server, no cron. The lead lands in a human inbox or it does not
 land at all — which is the failure mode we want, because a silent failure here
 is a lost client.
+
+## The UTF-8 bug — do not undo this
+
+**FormSubmit's plain form-encoded endpoint returns HTTP 500 on any non-ASCII
+byte**, in `_subject` or in any field value. Verified directly:
+
+| Payload | Result |
+| --- | --- |
+| `_subject` with an ASCII hyphen | 302, delivered |
+| `_subject` with an em dash | 500, lost |
+| body containing an em dash | 500, lost |
+| same content as JSON to `/ajax/` | 200, delivered |
+
+This is not an edge case. iOS turns a typed apostrophe into a curly one
+automatically, so an owner writing "I'm looking for full management" on a phone
+— exactly the scenario this site is built for — would have hit a 500 and their
+inquiry would have vanished. Accented names (José, Renée) would fail the same
+way.
+
+Two consequences, both load-bearing:
+
+- The JS path posts JSON, which handles UTF-8 correctly. That is why the
+  progressive enhancement exists; it is not decoration.
+- `_subject` is kept ASCII-only so the no-JS fallback also survives. **Do not
+  put an em dash back in that value**, however much it matches the house style.
+
+Residual risk: a visitor with JS disabled who types a non-ASCII character still
+hits the 500. That is a small population, and it disappears entirely when we
+move to our own Worker.
 
 ## Why this design
 
@@ -45,6 +79,11 @@ the revenue path:
 4. **Free tier, no SLA.** If FormSubmit goes down, submissions fail. There is
    no alerting on that.
 5. **No rate limiting beyond a honeypot.** Spam volume is unknown so far.
+6. **The service is visibly unreliable.** Beyond the UTF-8 bug above, their
+   activation endpoint returned HTTP 500 for the first token we registered and
+   never recovered; a second token registered minutes later activated fine. A
+   provider that flaky sitting directly on the revenue path is the strongest
+   argument for the migration below.
 
 ## Recommended migration path
 

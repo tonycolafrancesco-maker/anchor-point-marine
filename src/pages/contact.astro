@@ -5,11 +5,27 @@ import { FORM_ENDPOINT, url } from '../config';
 
 // FormSubmit needs an absolute URL to redirect to after a successful post.
 const thankYou = new URL(url('/thank-you'), Astro.site).href;
+
+// FormSubmit's plain form-encoded endpoint returns HTTP 500 on ANY non-ASCII
+// byte, in the subject or in the body. That is not a theoretical problem: iOS
+// silently turns a typed apostrophe into a curly one, so "I'm looking for..."
+// from an owner on a phone would fail and the lead would be lost. Their JSON
+// endpoint handles UTF-8 correctly, so we post JSON whenever fetch is
+// available and fall back to the plain form only without JS.
+//
+// Keep _subject ASCII-only so the no-JS fallback survives too.
+const ajaxEndpoint = FORM_ENDPOINT.replace(
+  'https://formsubmit.co/',
+  'https://formsubmit.co/ajax/'
+);
 ---
 
 <Base
   title="Contact"
   description="Request a yacht management consultation in Newport Harbor. Tell us about your vessel and we'll arrange a walkthrough at your slip or mooring."
+  path="/contact"
+  heading="Contact"
+  kind="contact"
 >
   <section class="hero">
     <div class="shell">
@@ -26,7 +42,7 @@ const thankYou = new URL(url('/thank-you'), Astro.site).href;
     <div class="shell shell--narrow">
       <form class="form" action={FORM_ENDPOINT} method="POST">
         <!-- FormSubmit configuration -->
-        <input type="hidden" name="_subject" value="New yacht management inquiry — Anchor Point website" />
+        <input type="hidden" name="_subject" value="New yacht management inquiry - Anchor Point website" />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_captcha" value="false" />
         <input type="hidden" name="_next" value={thankYou} />
@@ -124,6 +140,8 @@ const thankYou = new URL(url('/thank-you'), Astro.site).href;
           <button class="btn btn--primary" type="submit">Send inquiry</button>
         </div>
 
+        <p id="form-status" class="form__status" role="status" aria-live="polite"></p>
+
         <p class="form__note">
           Fields marked with an asterisk are required. We use your details to
           respond to this inquiry.
@@ -132,6 +150,88 @@ const thankYou = new URL(url('/thank-you'), Astro.site).href;
       </form>
     </div>
   </section>
+
+  <script is:inline define:vars={{ ajaxEndpoint, thankYou }}>
+    (function () {
+      var form = document.querySelector('form.form');
+      if (!form || !window.fetch) return; // no JS path: plain form POST still works
+
+      var status = document.getElementById('form-status');
+      var button = form.querySelector('button[type="submit"]');
+      var originalLabel = button ? button.textContent : 'Send inquiry';
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (form.getAttribute('data-sending') === '1') return;
+
+        var payload = {};
+        var honeyFilled = false;
+        new FormData(form).forEach(function (value, key) {
+          if (key === '_honey') {
+            if (String(value).trim() !== '') honeyFilled = true;
+            return;
+          }
+          payload[key] = value;
+        });
+
+        // Bot filled the hidden field. Send them to the thank-you page so the
+        // behaviour looks identical, but do not deliver anything.
+        if (honeyFilled) {
+          window.location.href = thankYou;
+          return;
+        }
+
+        form.setAttribute('data-sending', '1');
+        if (button) {
+          button.disabled = true;
+          button.textContent = 'Sending...';
+        }
+        status.textContent = '';
+        status.className = 'form__status';
+
+        attempt(3);
+
+        function attempt(triesLeft) {
+          fetch(ajaxEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(payload),
+          })
+            .then(function (response) {
+              return response.json().catch(function () {
+                return { success: 'false' };
+              });
+            })
+            .then(function (result) {
+              if (String(result.success) === 'true') {
+                window.location.href = thankYou;
+                return;
+              }
+              throw new Error('rejected');
+            })
+            .catch(function () {
+              if (triesLeft > 1) {
+                setTimeout(function () {
+                  attempt(triesLeft - 1);
+                }, 1500);
+                return;
+              }
+              form.removeAttribute('data-sending');
+              if (button) {
+                button.disabled = false;
+                button.textContent = originalLabel;
+              }
+              status.className = 'form__status form__status--error';
+              status.textContent =
+                'That did not send. Please try once more — and if it still fails, call us so your inquiry is not lost.';
+            });
+        }
+      });
+    })();
+  </script>
 
   <section class="section section--alt">
     <div class="shell shell--narrow">

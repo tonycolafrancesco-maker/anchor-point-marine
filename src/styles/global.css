@@ -663,6 +663,25 @@ textarea:focus {
   margin: 0;
 }
 
+/* Submission feedback. Empty and invisible until the script writes to it. */
+.form__status {
+  margin: 0;
+  font-size: var(--step-0);
+}
+
+.form__status:empty {
+  display: none;
+}
+
+.form__status--error {
+  border-left: 3px solid #b4472e;
+  background: rgba(180, 71, 46, 0.08);
+  color: #8f3a22;
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-weight: 600;
+}
+
 /* --- Utility ------------------------------------------------------------ */
 
 .stack > * + * {
