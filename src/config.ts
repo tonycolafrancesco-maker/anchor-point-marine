@@ -32,8 +32,14 @@ export const COPY_APPROVED = false;
 /**
  * Where the lead form posts. See docs/LEAD-CAPTURE.md for how this is wired
  * and how to move it in-house later.
+ *
+ * This is FormSubmit's alias for the destination inbox, not a naked email
+ * address — the address must stay out of the page source or it gets harvested
+ * for spam. The alias currently resolves to wheresjoe+leads@gmail.com.
+ * Activated and verified end to end on 2026-08-05.
  */
-export const FORM_ENDPOINT = 'https://formsubmit.co/wheresjoe@gmail.com';
+export const FORM_ENDPOINT =
+  'https://formsubmit.co/7d58a0f5f470f069012c4877e66224ec';
 
 /**
  * Unverified facts. `null` renders a placeholder chip on the page.
